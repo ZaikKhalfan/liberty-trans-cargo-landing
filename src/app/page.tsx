@@ -1,65 +1,126 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from "react"
+import { MeshGradient, DotOrbit } from "@paper-design/shaders-react"
+
+export default function DemoOne() {
+  const [intensity, setIntensity] = useState(1.5)
+  const [speed, setSpeed] = useState(1.0)
+  const [isInteracting, setIsInteracting] = useState(false)
+  const [activeEffect, setActiveEffect] = useState("mesh")
+  const [copied, setCopied] = useState(false)
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText("pnpm i 21st")
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error("Failed to copy text: ", err)
+    }
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="w-full h-screen bg-black relative overflow-hidden">
+      {activeEffect === "mesh" && (
+        <MeshGradient
+          className="w-full h-full absolute inset-0"
+          colors={["#000000", "#1a1a1a", "#333333", "#ffffff"]}
+          speed={speed}
+          backgroundColor="#000000"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+      )}
+
+      {activeEffect === "dots" && (
+        <div className="w-full h-full absolute inset-0 bg-black">
+          <DotOrbit
+            className="w-full h-full"
+            dotColor="#333333"
+            orbitColor="#1a1a1a"
+            speed={speed}
+            intensity={intensity}
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      )}
+
+      {activeEffect === "combined" && (
+        <>
+          <MeshGradient
+            className="w-full h-full absolute inset-0"
+            colors={["#000000", "#1a1a1a", "#333333", "#ffffff"]}
+            speed={speed * 0.5}
+            wireframe="true"
+            backgroundColor="#000000"
+          />
+          <div className="w-full h-full absolute inset-0 opacity-60">
+            <DotOrbit
+              className="w-full h-full"
+              dotColor="#333333"
+              orbitColor="#1a1a1a"
+              speed={speed * 1.5}
+              intensity={intensity * 0.8}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+        </>
+      )}
+
+      {/* UI Overlay */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Header */}
+        <div className="absolute top-8 left-8 pointer-events-auto"></div>
+
+        {/* Effect Controls */}
+        <div className="absolute bottom-8 left-8 pointer-events-auto"></div>
+
+        {/* Parameter Controls */}
+        <div className="absolute bottom-8 right-8 pointer-events-auto space-y-4"></div>
+
+        {/* Status indicator */}
+        <div className="absolute top-8 right-8 pointer-events-auto"></div>
+      </div>
+
+      {/* Lighting overlay effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute top-1/4 left-1/3 w-32 h-32 bg-gray-800/5 rounded-full blur-3xl animate-pulse"
+          style={{ animationDuration: `${3 / speed}s` }}
+        />
+        <div
+          className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-white/2 rounded-full blur-2xl animate-pulse"
+          style={{ animationDuration: `${2 / speed}s`, animationDelay: "1s" }}
+        />
+        <div
+          className="absolute top-1/2 right-1/3 w-20 h-20 bg-gray-900/3 rounded-full blur-xl animate-pulse"
+          style={{ animationDuration: `${4 / speed}s`, animationDelay: "0.5s" }}
+        />
+      </div>
+
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="text-center font-mono text-xs">
+          <div className="mb-6">
+            <div className="text-white/90 drop-shadow-lg mb-2">
+              Welcome to Liberty Trans Cargo
+            </div>
+            <div className="text-white/80 drop-shadow-lg">
+              Moving with care...everywhere
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-8">
+            <a
+              href="/transit"
+              className="pointer-events-auto text-white/90 hover:text-white transition-colors underline hover:no-underline drop-shadow-lg"
+            >
+              Transit
+            </a>
+            <a
+              href="/intra-regional"
+              className="pointer-events-auto text-white/90 hover:text-white transition-colors underline hover:no-underline drop-shadow-lg"
+            >
+              Intra-Regional
+            </a>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
-  );
+  )
 }
