@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/intra-regional/workspace/_next/:path*",
-      "destination": "https://ltcl-intra-regional-division.vercel.app/intra-regional/workspace/_next/:path*"
-    },
-    {
       "source": "/intra-regional/workspace/:path*",
-      "destination": "https://ltcl-intra-regional-division.vercel.app/intra-regional/workspace/:path*"
+      "destination": "https://ltcl-intra-regional-division.vercel.app/:path*"
     }
   ]
 }
