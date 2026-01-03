@@ -34,8 +34,6 @@ export default function DemoOne() {
         <div className="w-full h-full absolute inset-0 bg-black">
           <DotOrbit
             className="w-full h-full"
-            dotColor="#333333"
-            orbitColor="#1a1a1a"
             speed={speed}
             intensity={intensity}
           />
@@ -53,8 +51,6 @@ export default function DemoOne() {
           <div className="w-full h-full absolute inset-0 opacity-60">
             <DotOrbit
               className="w-full h-full"
-              dotColor="#333333"
-              orbitColor="#1a1a1a"
               speed={speed * 1.5}
               intensity={intensity * 0.8}
             />
